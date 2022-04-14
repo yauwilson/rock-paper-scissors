@@ -5,45 +5,54 @@ function computerPlay() {
     return play[randomIndex]
 }
 
-function playRound(playerSelection, computerSelection) {
+let scores = {
+    'user': 0,
+    'computer': 0,
+}
+
+function playRound(playerSelection) {
     let playerSelect = playerSelection.toLowerCase();
+    let computerSelection = computerPlay();
     let playObj = {
         'rock': 'paper',
         'paper': 'scissors',
         'scissors': 'rock'
     };
+    let winner = '';
+    // alert(`player: ${playerSelection} and computer: ${computerSelection}`);
+
     if (computerSelection === playerSelect) {
-        return 'tie';
+        // alert('tie');
     } else if (computerSelection === playObj[playerSelect]) {
         // console.log(`You Lose! ${computerSelection} beats ${playerSelect}`);
-        return 'computer'
+        // alert('computer')
+        scores['computer'] += 1;
+        if (scores['computer'] === 5) {
+            winner = 'Computer';
+        };
     } else {
         // console.log(`You Win! ${playerSelect} beats ${computerSelection}`);
-        return 'user'
-    }
-}
+        // alert('user')
+        scores['user'] += 1;
+        if (scores['user'] === 5) {
+            winner = 'User';
+        };
+    };
 
-function game() {
-    let scores = {
-        'user': 0,
-        'computer': 0,
-        'tie': 0,
-    }
-    for (let i = 0; i < 5; i++) {
-        const playerSelection = computerPlay();
-        const computerSelection = computerPlay();
-        winner = playRound(playerSelection, computerSelection);
-        scores[winner] += 1
-    }
-    console.log(scores);
-    if (scores['user'] == scores['computer']) {
-        console.log('Tie!')
-    }
-    else if (scores['user'] > scores['computer']) {
-        console.log('User wins!')
-    } else {
-        console.log('Computer wins!')
-    }
-}
+    if (winner) {
+        alert(`${winner} wins!`);
+        scores = {
+            'user': 0,
+            'computer': 0,
+        };
+    };
 
-game()
+    document.querySelector('#result').textContent = `User: ${scores['user']} Computer: ${scores['computer']}`;
+
+};
+
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => playRound(button.id));
+});
